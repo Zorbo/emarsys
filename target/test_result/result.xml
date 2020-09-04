@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<testsuite failures="0" name="cucumber.runtime.formatter.JUnitFormatter" skipped="0" tests="4" time="0.07041">
+    <testcase classname="DueDateLogic test" name="Test the function for DueDateLogic" time="0.057357">
+        <system-out>
+            <![CDATA[When I add test the calculate dueDate using Year: '2020' Month: '9' Day: '4' Hour: '14' Minute: '0'.passed
+Then I receive result: '2020-09-07T14:00:00' with turn around time: '8'.....passed
+]]>
+        </system-out>
+    </testcase>
+    <testcase classname="DueDateLogic test" name="Test the function for DueDateLogic 2" time="0.004905">
+        <system-out>
+            <![CDATA[When I add test the calculate dueDate using Year: '2020' Month: '9' Day: '4' Hour: '14' Minute: '0'.passed
+Then I receive result: '2020-09-08T14:00:00' with turn around time: '16'....passed
+]]>
+        </system-out>
+    </testcase>
+    <testcase classname="DueDateLogic test" name="Test the function for DueDateLogic 3" time="0.004777">
+        <system-out>
+            <![CDATA[When I add test the calculate dueDate using Year: '2020' Month: '9' Day: '4' Hour: '14' Minute: '0'.passed
+Then I receive result: '2020-09-14T14:00:00' with turn around time: '48'....passed
+]]>
+        </system-out>
+    </testcase>
+    <testcase classname="DueDateLogic test" name="Test the function for DueDateLogic 4" time="0.003371">
+        <system-out>
+            <![CDATA[When I add test the calculate dueDate using Year: '2020' Month: '9' Day: '4' Hour: '14' Minute: '0'.passed
+Then I receive result: '2020-09-07T11:00:00' with turn around time: '5'.....passed
+]]>
+        </system-out>
+    </testcase>
+</testsuite>
