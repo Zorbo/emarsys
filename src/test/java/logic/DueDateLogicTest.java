@@ -22,12 +22,28 @@ public class DueDateLogicTest {
 
 
     @Test
-    public void testDueDateLogicCorrect() {
-        Assert.assertEquals(RESULT_DATE_TIME, logic.calculateDueDate(TEST_DATE_TIME, 8L));
-        Assert.assertEquals(RESULT_DATE_TIME_2, logic.calculateDueDate(TEST_DATE_TIME, 16L));
-        Assert.assertEquals(RESULT_DATE_TIME_3, logic.calculateDueDate(TEST_DATE_TIME, 48L));
-        Assert.assertEquals(RESULT_DATE_TIME_4, logic.calculateDueDate(TEST_DATE_TIME, 5L));
+    public void testDueDateLogicCorrectZeroHour() {
         Assert.assertEquals(TEST_DATE_TIME, logic.calculateDueDate(TEST_DATE_TIME, 0L));
+    }
+
+    @Test
+    public void testDueDateLogicCorrectFiveHour() {
+        Assert.assertEquals(RESULT_DATE_TIME_4, logic.calculateDueDate(TEST_DATE_TIME, 5L));
+    }
+
+    @Test
+    public void testDueDateLogicCorrectEightHour() {
+        Assert.assertEquals(RESULT_DATE_TIME, logic.calculateDueDate(TEST_DATE_TIME, 8L));
+    }
+
+    @Test
+    public void testDueDateLogicCorrectSixteenHour() {
+        Assert.assertEquals(RESULT_DATE_TIME_2, logic.calculateDueDate(TEST_DATE_TIME, 16L));
+    }
+
+    @Test
+    public void testDueDateLogicCorrectFortyEightHour() {
+        Assert.assertEquals(RESULT_DATE_TIME_3, logic.calculateDueDate(TEST_DATE_TIME, 48L));
     }
 
     @Test
@@ -37,22 +53,40 @@ public class DueDateLogicTest {
         Assert.assertEquals(expectedMessage, ex.getMessage());
     }
 
+    @Test(expected = IssueDateException.class)
+    public void testWeekendDateSaturdayShouldThrowError() {
+        logic.calculateDueDate(TEST_DATE_TIME_SATURDAY, 8L);
+    }
+
+    @Test(expected = IssueDateException.class)
+    public void testWeekendDateSundayShouldThrowError() {
+        logic.calculateDueDate(TEST_DATE_TIME_SUNDAY, 8L);
+    }
+
     @Test
-    public void testWeekendDateShouldThrowError() {
+    public void testWeekendDateShouldThrowSpecificErrorMessage() {
         Exception ex = Assert.assertThrows(IssueDateException.class, () -> logic.calculateDueDate(
             TEST_DATE_TIME_SATURDAY, 8L));
-        Assert.assertThrows(IssueDateException.class, () -> logic.calculateDueDate(TEST_DATE_TIME_SATURDAY, 8L));
-        Assert.assertThrows(IssueDateException.class, () -> logic.calculateDueDate(TEST_DATE_TIME_SUNDAY, 8L));
         String expectedMessage = "issues only can be reported in working days MONDAY to FRIDAY";
         Assert.assertTrue(ex.getMessage().contains(expectedMessage));
     }
 
+    @Test(expected = IssueDateException.class)
+    public void testBeforeNonWorkingHoursShouldThrowError() {
+        logic.calculateDueDate(TEST_DATE_TIME_BEFORE_NON_WORKING_HOURS, 8L);
+    }
+
+    @Test(expected = IssueDateException.class)
+    public void testAfterNonWorkingHoursShouldThrowError() {
+        logic.calculateDueDate(TEST_DATE_TIME_AFTER_NON_WORKING_HOURS, 8L);
+    }
+
     @Test
-    public void testNonWorkingHoursShouldThrowError() {
+    public void testNonWorkingHoursShouldThrowSpecificErrorMessage() {
         Exception ex = Assert.assertThrows(IssueDateException.class, () -> logic.calculateDueDate(
             TEST_DATE_TIME_BEFORE_NON_WORKING_HOURS, 8L));
-        Assert.assertThrows(IssueDateException.class, () -> logic.calculateDueDate(TEST_DATE_TIME_BEFORE_NON_WORKING_HOURS, 8L));
-        Assert.assertThrows(IssueDateException.class, () -> logic.calculateDueDate(TEST_DATE_TIME_AFTER_NON_WORKING_HOURS, 8L));
+        Assert.assertThrows(IssueDateException.class,
+                            () -> logic.calculateDueDate(TEST_DATE_TIME_AFTER_NON_WORKING_HOURS, 8L));
         String expectedMessage = "working hours between: 09:00 and 17:00";
         Assert.assertTrue(ex.getMessage().contains(expectedMessage));
     }
