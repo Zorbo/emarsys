@@ -19,8 +19,11 @@ import org.slf4j.LoggerFactory;
 public class DueDateLogic {
 
     private static final Logger logger = LoggerFactory.getLogger(DueDateLogic.class);
-    public static final LocalTime START = LocalTime.of(9, 0);
-    public static final LocalTime FINISH = LocalTime.of(17, 1);
+    private static final LocalTime START = LocalTime.of(9, 0);
+    private static final LocalTime FINISH = LocalTime.of(17, 0);
+    private static final long NANOS_TO_ADD = 1L;
+    private static final int HOURS = 1;
+    private static final int ZERO = 0;
 
     /**
      * Calculate the issue due date
@@ -33,7 +36,7 @@ public class DueDateLogic {
         logger.info("Starting calculating due date for the sent issue");
         String dateFormat = submitDate.atZone(ZoneId.of("GMT")).format(DateTimeFormatter.RFC_1123_DATE_TIME);
 
-        if (turnAroundTime < 0 ) {
+        if (turnAroundTime < ZERO ) {
             throw new IssueDateException("Turn Around Time cannot be smaller than ZERO");
         }
         if (isWeekend(submitDate) || !isBetweenWorkingHours(submitDate)) {
@@ -43,8 +46,8 @@ public class DueDateLogic {
         }
 
         LocalDateTime resolvedDate = submitDate;
-        while (turnAroundTime != 0) {
-            resolvedDate = resolvedDate.plusHours(1);
+        while (turnAroundTime != ZERO) {
+            resolvedDate = resolvedDate.plusHours(HOURS);
             if (!isWeekend(resolvedDate) && isBetweenWorkingHours(resolvedDate)) {
                 turnAroundTime--;
             }
@@ -58,6 +61,6 @@ public class DueDateLogic {
 
     private boolean isBetweenWorkingHours(LocalDateTime submitDate) {
         LocalTime current = LocalTime.of(submitDate.getHour(), submitDate.getMinute());
-        return current.isAfter(START) && current.isBefore(FINISH);
+        return current.isAfter(START) && current.isBefore(FINISH.plusNanos(NANOS_TO_ADD));
     }
 }
